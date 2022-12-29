@@ -4,6 +4,32 @@
 MainComponent::MainComponent()
 {
     setSize (600, 400);
+
+    addAndMakeVisible(frequencySlider);
+    frequencySlider.setRange(50, 5000, 1);
+    frequencySlider.setTextValueSuffix(" Hz");
+    frequencySlider.addListener(this);
+    
+    addAndMakeVisible(frequencyLabel);
+    frequencyLabel.setText("Frequency", dontSendNotification);
+    frequencyLabel.attachToComponent(&frequencySlider, true);
+
+    frequencySlider.setValue(500);
+    frequencySlider.setSkewFactorFromMidPoint(500);
+    frequencySlider.setTextBoxStyle(Slider::TextBoxLeft, true, 120, frequencySlider.getTextBoxHeight());
+
+    addAndMakeVisible(durationSlider);
+    durationSlider.setRange(1.0 / frequencySlider.getMaximum(), 1.0 / frequencySlider.getMinimum());
+    durationSlider.setTextValueSuffix(" s");
+    durationSlider.addListener(this);
+
+    addAndMakeVisible(durationLabel);
+    durationLabel.setText("Duration", dontSendNotification);
+    durationLabel.attachToComponent(&durationSlider, true);
+
+    durationSlider.setSkewFactorFromMidPoint(0.002);
+    durationSlider.setTextBoxStyle(Slider::TextBoxLeft, true, 120, durationSlider.getTextBoxHeight());
+
 }
 
 MainComponent::~MainComponent()
@@ -13,17 +39,14 @@ MainComponent::~MainComponent()
 //==============================================================================
 void MainComponent::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    g.setFont (juce::Font (16.0f));
-    g.setColour (juce::Colours::white);
-    g.drawText ("Hello World!", getLocalBounds(), juce::Justification::centred, true);
+    
 }
 
 void MainComponent::resized()
 {
-    // This is called when the MainComponent is resized.
-    // If you add any child components, this is where you should
-    // update their positions.
+    const int border = 120;
+
+    frequencySlider.setBounds(border, 20, getWidth() - border, 20);
+
+    durationSlider.setBounds(border, 50, getWidth() - border, 50);
 }
